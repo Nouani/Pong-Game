@@ -40,7 +40,6 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);
-		this.frame.setFocusable(true);
 	}
 	
 	public void start() {
@@ -87,6 +86,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 	@Override
 	public void run() {
+		requestFocus();
 		long lastTime = System.nanoTime();
 		double amountOfTicks = 60.0;
 		double ns = 1000000000 / amountOfTicks;
