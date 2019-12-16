@@ -18,8 +18,9 @@ public class Ball {
 		this.width = width;
 		this.height = height;
 		
-		this.dx = new Random().nextGaussian();
-		this.dy = new Random().nextGaussian();
+		int angle = new Random().nextInt(359);
+		this.dx = Math.cos(Math.toRadians(angle));
+		this.dy = Math.sin(Math.toRadians(angle));
 	}
 	
 	public void tick() {
