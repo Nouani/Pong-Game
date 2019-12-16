@@ -1,6 +1,7 @@
 package pong;
 
 import java.awt.Canvas;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
@@ -13,9 +14,9 @@ import javax.swing.JFrame;
 public class Game extends Canvas implements Runnable, KeyListener{
 	JFrame frame;
 	
-	private static final int WIDTH = 240;
-	private static final int HEIGHT = 120;
-	private static final int SCALE = 3;
+	static final int WIDTH = 240;
+	static final int HEIGHT = 120;
+	static final int SCALE = 3;
 	
 	private Thread thread;
 	private boolean isRunnable;
@@ -25,7 +26,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private BufferedImage layer = new BufferedImage(Game.WIDTH,Game.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	
 	public Game() {
-		this.player = new Player();
+		this.player = new Player(100,Game.HEIGHT-10,40,10);
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE));
 		initFrame();
@@ -39,6 +40,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		this.frame.setLocationRelativeTo(null);
 		this.frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.frame.setVisible(true);
+		this.frame.setFocusable(true);
 	}
 	
 	public void start() {
@@ -58,7 +60,7 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	}
 	
 	public void tick() {
-		
+		player.tick();
 	}
 	
 	public void render() {
@@ -68,6 +70,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 			return;
 		}
 		Graphics g = this.layer.getGraphics();
+		g.setColor(Color.BLACK);
+		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
 		player.render(g);
 		
 		g = bs.getDrawGraphics();
@@ -114,20 +118,26 @@ public class Game extends Canvas implements Runnable, KeyListener{
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		if (e.KEY_PRESSED == KeyEvent.VK_RIGHT) {
-			
+		int codigo = e.getKeyCode();
+		if (codigo == KeyEvent.VK_RIGHT) {
+			this.player.moveRight = true;
+		} else if (codigo == KeyEvent.VK_LEFT) {
+			this.player.moveLeft = true;
 		}
 		
 	}
 
 	@Override
-	public void keyReleased(KeyEvent arg0) {
-		// TODO Auto-generated method stub
-		
+	public void keyReleased(KeyEvent e) {
+		if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+			this.player.moveRight = false;
+		} else if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+			this.player.moveLeft = false;
+		}
 	}
 
 	@Override
-	public void keyTyped(KeyEvent arg0) {
+	public void keyTyped(KeyEvent e) {
 		// TODO Auto-generated method stub
 		
 	}
