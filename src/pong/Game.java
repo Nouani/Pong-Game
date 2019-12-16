@@ -2,23 +2,32 @@ package pong;
 
 import java.awt.Canvas;
 import java.awt.Dimension;
+import java.awt.Graphics;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
+import java.awt.image.BufferStrategy;
+import java.awt.image.BufferedImage;
 
 import javax.swing.JFrame;
 
-import com.sun.glass.ui.Window;
-
-public class Game extends Canvas implements Runnable{
+public class Game extends Canvas implements Runnable, KeyListener{
 	JFrame frame;
 	
 	private static final int WIDTH = 240;
 	private static final int HEIGHT = 120;
-	private static final int SIZE = 3;
+	private static final int SCALE = 3;
 	
 	private Thread thread;
 	private boolean isRunnable;
 	
+	public Player player;
+	
+	private BufferedImage layer = new BufferedImage(Game.WIDTH,Game.HEIGHT,BufferedImage.TYPE_INT_RGB);
+	
 	public Game() {
-		this.setPreferredSize(new Dimension(Game.WIDTH * Game.SIZE, Game.HEIGHT * Game.SIZE));
+		this.player = new Player();
+		this.addKeyListener(this);
+		this.setPreferredSize(new Dimension(Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE));
 		initFrame();
 	}
 	
@@ -39,7 +48,13 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void stop() {
-		
+		this.isRunnable = false;
+		try {
+			this.thread.join();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void tick() {
@@ -47,7 +62,18 @@ public class Game extends Canvas implements Runnable{
 	}
 	
 	public void render() {
+		BufferStrategy bs = this.getBufferStrategy();
+		if (bs == null) {
+			this.createBufferStrategy(3);
+			return;
+		}
+		Graphics g = this.layer.getGraphics();
+		player.render(g);
 		
+		g = bs.getDrawGraphics();
+		g.drawImage(this.layer, 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
+		
+		bs.show();
 	}
 	
 	public static void main(String[] args) {
@@ -83,6 +109,27 @@ public class Game extends Canvas implements Runnable{
 				timer += 1000;
 			}
 		}
+		stop();
+	}
+
+	@Override
+	public void keyPressed(KeyEvent e) {
+		if (e.KEY_PRESSED == KeyEvent.VK_RIGHT) {
+			
+		}
+		
+	}
+
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
