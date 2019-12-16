@@ -6,7 +6,7 @@ import java.awt.Graphics;
 public class Player {
 	public boolean moveRight, moveLeft;
 	public int x, y;
-	private int width, height;
+	public int width, height;
 	
 	public Player(int x, int y, int width, int height) {
 		this.x = x;

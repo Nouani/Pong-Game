@@ -14,19 +14,23 @@ import javax.swing.JFrame;
 public class Game extends Canvas implements Runnable, KeyListener{
 	JFrame frame;
 	
-	static final int WIDTH = 240;
-	static final int HEIGHT = 120;
+	static final int WIDTH = 120;
+	static final int HEIGHT = 180;
 	static final int SCALE = 3;
 	
 	private Thread thread;
 	private boolean isRunnable;
 	
-	public Player player;
+	public static Player player;
+	public static Enemy enemy;
+	public static Ball ball;
 	
 	private BufferedImage layer = new BufferedImage(Game.WIDTH,Game.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	
 	public Game() {
 		this.player = new Player(100,Game.HEIGHT-10,40,10);
+		this.enemy = new Enemy(100,0,40,10);
+		this.ball = new Ball(100,Game.HEIGHT/2-1,4,4);
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE));
 		initFrame();
@@ -59,7 +63,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	}
 	
 	public void tick() {
-		player.tick();
+		this.player.tick();
+		this.enemy.tick();
+		this.ball.tick();
 	}
 	
 	public void render() {
@@ -71,7 +77,9 @@ public class Game extends Canvas implements Runnable, KeyListener{
 		Graphics g = this.layer.getGraphics();
 		g.setColor(Color.BLACK);
 		g.fillRect(0, 0, Game.WIDTH, Game.HEIGHT);
-		player.render(g);
+		this.player.render(g);
+		this.enemy.render(g);
+		this.ball.render(g);
 		
 		g = bs.getDrawGraphics();
 		g.drawImage(this.layer, 0, 0, Game.WIDTH*Game.SCALE, Game.HEIGHT*Game.SCALE, null);
