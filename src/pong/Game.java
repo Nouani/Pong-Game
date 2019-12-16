@@ -28,8 +28,8 @@ public class Game extends Canvas implements Runnable, KeyListener{
 	private BufferedImage layer = new BufferedImage(Game.WIDTH,Game.HEIGHT,BufferedImage.TYPE_INT_RGB);
 	
 	public Game() {
-		this.player = new Player(100,Game.HEIGHT-5,40,5);
-		this.enemy = new Enemy(100,0,40,5);
+		this.player = new Player(40,Game.HEIGHT-5,40,5);
+		this.enemy = new Enemy(40,0,40,5);
 		this.ball = new Ball(100,Game.HEIGHT/2-1,4,4);
 		this.addKeyListener(this);
 		this.setPreferredSize(new Dimension(Game.WIDTH * Game.SCALE, Game.HEIGHT * Game.SCALE));
